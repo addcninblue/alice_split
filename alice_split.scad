@@ -57,8 +57,11 @@ right_center_cluster = [[0.75, 1,   1, 1, 1],
                         [0,    1,   1, 1, 1],
                         [0,    2.75, 1.5]];
 
-// #2
-/* key(1); */
+right_cluster = [[0.25,   1, 1, 1, 1],
+                 [0,   1, 1, 1, 1.5],
+                 [0.5,    1, 1, 2.25],
+                 [0.25,   1, 1, 1.75, 1],
+                 [2.5, 1.5]];
 
 LEFT_CENTER_OFFSET = left_center_cluster[len(left_center_cluster) - 1][0];
 cluster(left_cluster);
@@ -68,8 +71,9 @@ translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriat
     cluster(left_center_cluster);
 
 RIGHT_CENTER_OFFSET = sum(right_center_cluster[len(right_center_cluster) - 1]);
-translate([1 * (0.5+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
+translate([(0.5+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
     rotate(a=[0, 0, ROTATION])
     translate([-1 * RIGHT_CENTER_OFFSET * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
     cluster(right_center_cluster);
-
+translate([(0.1+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
+    cluster(right_cluster);

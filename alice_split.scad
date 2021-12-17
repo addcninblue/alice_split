@@ -7,6 +7,7 @@ $fs = 0.1;
 PLATE_PLACEHOLDER_SIZE = 19.05;
 SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
+RIGHT_PLATE_OFFSET = 6.5;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
@@ -101,10 +102,29 @@ difference() {
     };
 };
 
-RIGHT_CENTER_OFFSET = sum(right_center_cluster[len(right_center_cluster) - 1]);
-translate([(0.5+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
-    rotate(a=[0, 0, ROTATION])
-    translate([-1 * RIGHT_CENTER_OFFSET * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
-    cluster(right_center_cluster);
-translate([(0.1+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
-    cluster(right_cluster);
+// Right Plate
+
+RIGHT_CENTER_LENGTH = sum(right_center_cluster[len(right_center_cluster) - 1]);
+RIGHT_CENTER_MAX_LENGTH = sum(right_center_cluster[0]); // TODO: cleanup
+
+RIGHT_LENGTH = sum(right_cluster[len(right_cluster) - 2]);
+
+difference(){
+    union() {
+        translate([(0.5+RIGHT_CENTER_MAX_LENGTH) * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH + PADDING)*PLATE_PLACEHOLDER_SIZE, -PADDING*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(RIGHT_CENTER_MAX_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*PADDING)*PLATE_PLACEHOLDER_SIZE]);
+        translate([(0.1+RIGHT_CENTER_LENGTH)*PLATE_PLACEHOLDER_SIZE, (RIGHT_PLATE_OFFSET-PADDING)*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(RIGHT_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*PADDING)*PLATE_PLACEHOLDER_SIZE]);
+    }
+
+    union() {
+        translate([(0.5+RIGHT_CENTER_LENGTH) * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-RIGHT_CENTER_LENGTH * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
+            cluster(right_center_cluster);
+        translate([(0.1+RIGHT_CENTER_LENGTH) * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(right_cluster);
+    }
+}

@@ -70,6 +70,10 @@ translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriat
     translate([-1 * LEFT_CENTER_OFFSET * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
     cluster(left_center_cluster);
 
+// #2
+translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+    key(1);
+
 RIGHT_CENTER_OFFSET = sum(right_center_cluster[len(right_center_cluster) - 1]);
 translate([(0.5+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])
     rotate(a=[0, 0, ROTATION])

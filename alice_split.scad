@@ -7,12 +7,14 @@ SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
-module key(width=1) {
+module plate_placeholder(width=1) {
     translate([width*PLATE_PLACEHOLDER_SIZE/2, PLATE_PLACEHOLDER_SIZE/2])
-        difference() {
-            square([width*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE], center=true); // keycap placeholder space
-            square([SWITCH_SIZE, SWITCH_SIZE], center=true);
-        }
+        square([width*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE], center=true); // keycap placeholder space
+}
+
+module switch(width=1) {
+    translate([width*PLATE_PLACEHOLDER_SIZE/2, PLATE_PLACEHOLDER_SIZE/2])
+        square([SWITCH_SIZE, SWITCH_SIZE], center=true);
 }
 
 function sum(row, i = 0, sum_so_far = 0) = len(row) == i ? sum_so_far : sum(row, i+1, sum_so_far+row[i]);
@@ -31,7 +33,7 @@ module cluster(keys) { // 2d array
 
             if (size >= 1) {
                 translate([x_offset * PLATE_PLACEHOLDER_SIZE, y_offset * PLATE_PLACEHOLDER_SIZE, 0])
-                    key(size);
+                    switch(size); // TODO: change back to switch()
             }
         }
     }

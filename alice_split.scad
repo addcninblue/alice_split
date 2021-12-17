@@ -15,6 +15,8 @@ module key(width=1) {
         }
 }
 
+function sum(row, i = 0, sum_so_far = 0) = len(row) == i ? sum_so_far : sum(row, i+1, sum_so_far+row[i]);
+
 function accumulate_lengths(row, i = 0, sum=0) = len(row) - 1 == i ? [sum] :
     concat(sum, accumulate_lengths(row, i+1, sum+row[i]));
 

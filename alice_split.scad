@@ -1,5 +1,7 @@
 /* 1u = 1mm */
 $fn = 50;
+$fa = 5;
+$fs = 0.1;
 
 // CONSTANTS
 PLATE_PLACEHOLDER_SIZE = 19.05;
@@ -66,15 +68,38 @@ right_cluster = [[0.25,   1, 1, 1, 1],
                  [2.5, 1.5]];
 
 LEFT_CENTER_OFFSET = left_center_cluster[len(left_center_cluster) - 1][0];
-cluster(left_cluster);
-translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriate position
-    rotate(a=[0, 0, -1 * ROTATION])                 // Apply rotation, centered on bottom left key
-    translate([-1 * LEFT_CENTER_OFFSET * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
-    cluster(left_center_cluster);
 
-// #2
-translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
-    key(1);
+WIDTH = 9;
+HEIGHT = 5;
+RADIUS = 0.25;
+PADDING = 0.25;
+
+// Left Plate
+LEFT_CENTER_LENGTH = sum(left_center_cluster[len(left_center_cluster) - 1]);
+
+difference() {
+    union() {
+        translate([-PADDING*PLATE_PLACEHOLDER_SIZE, -PADDING*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(4.5+LEFT_CENTER_OFFSET+PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*PADDING)*PLATE_PLACEHOLDER_SIZE]);
+
+        translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, -1 * ROTATION])
+            translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, -PADDING*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(LEFT_CENTER_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*PADDING)*PLATE_PLACEHOLDER_SIZE]);
+    };
+
+    union() {
+        cluster(left_cluster);
+        translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriate position
+            rotate(a=[0, 0, -1 * ROTATION])                 // Apply rotation, centered on bottom left key
+            translate([-1 * LEFT_CENTER_OFFSET * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
+            cluster(left_center_cluster);
+
+        // #2
+        translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+            switch(1);
+    };
+};
 
 RIGHT_CENTER_OFFSET = sum(right_center_cluster[len(right_center_cluster) - 1]);
 translate([(0.5+RIGHT_CENTER_OFFSET) * PLATE_PLACEHOLDER_SIZE, 6*PLATE_PLACEHOLDER_SIZE, 0])

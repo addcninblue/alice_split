@@ -3,7 +3,7 @@ $fn = 50;
 
 // CONSTANTS
 PLATE_PLACEHOLDER_SIZE = 19.05;
-SWITCH_SIZE = 14;
+SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png

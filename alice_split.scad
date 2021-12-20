@@ -102,6 +102,16 @@ difference() {
         // #2
         translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
             switch(1);
+
+        // Scuffed: Take out top triangle
+        translate([0, (HEIGHT+PADDING)*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(LEFT_CENTER_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
+
+        // Scuffed: Take out center left triangle
+        translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, (HEIGHT+PADDING)*PLATE_PLACEHOLDER_SIZE, 0])
+            square([(LEFT_CENTER_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
     };
 };
 

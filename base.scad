@@ -7,7 +7,7 @@ $fs = 0.1;
 PLATE_PLACEHOLDER_SIZE = 19.05;
 SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
-RIGHT_PLATE_OFFSET = 6.5;
+RIGHT_PLATE_OFFSET = 7;
 
 PLATE_HEIGHT = 5;
 

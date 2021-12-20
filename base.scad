@@ -7,10 +7,11 @@ $fs = 0.1;
 PLATE_PLACEHOLDER_SIZE = 19.05;
 SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
-RIGHT_PLATE_OFFSET = 7;
+RIGHT_PLATE_OFFSET = 7.5;
 
 PLATE_HEIGHT = 5;
-CORNER_WIDTH = 3;
+OUTER_WIDTH = 3;
+INNER_WIDTH = 1.5;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
@@ -64,7 +65,7 @@ left_cluster = [[0.5,  1, 0.25, 1,    1],
                 [0.25, 1, 0.25, 1.5,  1],
                 [0,    1, 0.25, 1.75, 1],
                 [1,             2.25, 1],
-                [1.25,          1.25]];
+                [1,          1.25]];
 
 left_center_cluster = [[0.5,  1,   1, 1, 1],
                        [0,    1,   1, 1, 1],
@@ -82,13 +83,12 @@ right_cluster = [[0.25,   1, 1, 1, 1],
                  [0,   1, 1, 1, 1.5],
                  [0.5,    1, 1, 2.25],
                  [0.25,   1, 1, 1.75, 1],
-                 [2.5, 1.5]];
+                 [3, 1.5]];
 
 LEFT_CENTER_OFFSET = left_center_cluster[len(left_center_cluster) - 1][0];
 
 WIDTH = 9;
 HEIGHT = 5;
-RADIUS = 0.25;
 PADDING = 0.5;
 
 module left(type) {
@@ -148,7 +148,7 @@ module left(type) {
         difference() {
             minkowski() {
                 base();
-                circle(RADIUS);
+                circle(OUTER_WIDTH);
             };
             cutouts();
         };
@@ -203,10 +203,11 @@ module right(type) {
 
     linear_extrude(height=PLATE_HEIGHT, center=true)
         translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
+        rotate(a=[0, 0, -ROTATION])
         difference() {
             minkowski() {
                 base();
-                circle(RADIUS);
+                circle(OUTER_WIDTH);
             };
             cutouts();
         };

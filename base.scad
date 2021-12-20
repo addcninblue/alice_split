@@ -10,6 +10,7 @@ ROTATION = 10; // degrees
 RIGHT_PLATE_OFFSET = 7;
 
 PLATE_HEIGHT = 5;
+CORNER_WIDTH = 3;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
@@ -85,7 +86,7 @@ PADDING = 0.5;
 module left(type) {
     LEFT_CENTER_LENGTH = sum(left_center_cluster[len(left_center_cluster) - 1]);
 
-    linear_extrude(height=PLATE_HEIGHT, center=true)
+    module base() {
         difference() {
             union() {
                 // left
@@ -100,24 +101,6 @@ module left(type) {
             };
 
             union() {
-                // left
-                cluster(left_cluster, type);
-
-                // center left
-                translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriate position
-                    rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
-                    translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
-                    cluster(left_center_cluster, type);
-
-                // #2
-                if (type == "switch") {
-                    translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
-                        switch(1);
-                } else if (type == "upper") {
-                    translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
-                        plate_placeholder(1);
-                }
-
                 // Scuffed: Take out top triangle
                 translate([0, (HEIGHT+PADDING)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(LEFT_CENTER_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
@@ -129,14 +112,45 @@ module left(type) {
                     square([(LEFT_CENTER_LENGTH+PADDING)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
             };
         };
+    };
+
+    module cutouts() {
+        union() {
+            // left
+            cluster(left_cluster, type);
+
+            // center left
+            translate([4.5*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriate position
+                rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
+                translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
+                cluster(left_center_cluster, type);
+
+            // #2
+            if (type == "switch") {
+                translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+                    switch(1);
+            } else if (type == "upper") {
+                translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+                    plate_placeholder(1);
+            }
+        };
+    };
+
+    linear_extrude(height=PLATE_HEIGHT, center=true)
+        difference() {
+            minkowski() {
+                base();
+                circle(RADIUS);
+            };
+            cutouts();
+        };
 }
 
 module right(type) {
     RIGHT_CENTER_MAX_LENGTH = sum(right_center_cluster[0]);
     RIGHT_LENGTH = sum(right_cluster[len(right_cluster) - 2]);
 
-    linear_extrude(height=PLATE_HEIGHT, center=true)
-    translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
+    module base() {
         difference(){
             union() {
                 // center right
@@ -151,16 +165,6 @@ module right(type) {
             }
 
             union() {
-                // center right
-                translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
-                    rotate(a=[0, 0, ROTATION])
-                    translate([-(RIGHT_CENTER_MAX_LENGTH) * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
-                    cluster(right_center_cluster, type);
-
-                // right
-                translate([-0.2 * PLATE_PLACEHOLDER_SIZE, 0, 0])
-                    cluster(right_cluster, type);
-
                 // Scuffed: Take out center right triangle
                 translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
                     rotate(a=[0, 0, ROTATION])
@@ -172,4 +176,27 @@ module right(type) {
                     square([(RIGHT_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
             }
         }
+    };
+
+    module cutouts() {
+        // center right
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH) * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
+            cluster(right_center_cluster, type);
+
+        // right
+        translate([-0.2 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            cluster(right_cluster, type);
+    };
+
+    linear_extrude(height=PLATE_HEIGHT, center=true)
+        translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
+        difference() {
+            minkowski() {
+                base();
+                circle(RADIUS);
+            };
+            cutouts();
+        };
 }

@@ -3,10 +3,10 @@
 This is a split version of the [TGR Alice](https://geekhack.org/index.php?topic=95054.0)
 
 ## TODOs
-* Add spacing for pro micros
-* Fix square joins on both boards
-* Add OLED display on right board, top right
-* Add rotary encoder on left board, bottom left
+* [ ] Add spacing for pro micros
+* [X] Fix square joins on both boards
+* [ ] Add OLED display on right board, top right
+* [ ] Add rotary encoder on left board, bottom left
 
 ## BOM
 

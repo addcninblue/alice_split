@@ -50,6 +50,14 @@ module cluster(keys, type) { // 2d array
     }
 }
 
+module ky_040(type) {
+    if (type == "switch") {
+        circle(6.4/2);
+    } else if (type == "upper") {
+        circle(16/2);
+    }
+}
+
 // LEFT CLUSTER
 //        PAD  ESC PAD   MODS KEY
 left_cluster = [[0.5,  1, 0.25, 1,    1],
@@ -188,6 +196,9 @@ module right(type) {
         // right
         translate([-0.2 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             cluster(right_cluster, type);
+
+        translate([(RIGHT_CENTER_MAX_LENGTH-0.07)*PLATE_PLACEHOLDER_SIZE, (5-0.25)*PLATE_PLACEHOLDER_SIZE,0])
+            ky_040(type);
     };
 
     linear_extrude(height=PLATE_HEIGHT, center=true)

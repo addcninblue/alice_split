@@ -6,7 +6,8 @@ This is a split version of the [TGR Alice](https://geekhack.org/index.php?topic=
 * [ ] Add spacing for pro micros
 * [X] Fix square joins on both boards
 * [ ] Add OLED display on right board, top right
-* [ ] Add rotary encoder on left board, bottom left
+* [X] Add rotary encoder on left board, bottom left
+* Fix upper: remove islands
 
 ## BOM
 

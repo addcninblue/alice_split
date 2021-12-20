@@ -9,7 +9,7 @@ SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
 RIGHT_PLATE_OFFSET = 6.5;
 
-PLATE_HEIGHT = 1.5;
+PLATE_HEIGHT = 5;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {

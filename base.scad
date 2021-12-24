@@ -1,7 +1,12 @@
+include <const.scad>;
+
 /* 1u = 1mm */
 $fn = 50;
 $fa = 5;
 $fs = 0.1;
+
+// VARIABLES
+KNOB_LOCATION = KNOB_LEFT;
 
 // CONSTANTS
 PLATE_PLACEHOLDER_SIZE = 19.05;
@@ -39,10 +44,10 @@ module cluster(keys, type) { // 2d array
             size = keys[row_index][col_index];
 
             if (size >= 1) {
-                if (type == "B") {
+                if (type == TYPE_B) {
                     translate([x_offset * PLATE_PLACEHOLDER_SIZE, y_offset * PLATE_PLACEHOLDER_SIZE, 0])
                         switch(size);
-                } else if (type == "A") {
+                } else if (type == TYPE_A) {
                     translate([x_offset * PLATE_PLACEHOLDER_SIZE, y_offset * PLATE_PLACEHOLDER_SIZE, 0])
                         plate_placeholder(size);
                 }
@@ -52,9 +57,9 @@ module cluster(keys, type) { // 2d array
 }
 
 module ky_040(type) {
-    if (type == "B") {
+    if (type == TYPE_B) {
         circle(6.4/2);
-    } else if (type == "A") {
+    } else if (type == TYPE_A) {
         circle(16/2);
     }
 }
@@ -134,10 +139,10 @@ module left(type, padding=PADDING) {
                 cluster(left_center_cluster, type);
 
             // #2
-            if (type == "B") {
+            if (type == TYPE_B) {
                 translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
                     switch(1);
-            } else if (type == "A") {
+            } else if (type == TYPE_A) {
                 translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
                     plate_placeholder(1);
             }
@@ -196,8 +201,14 @@ module right(type, padding=PADDING) {
         translate([-0.2 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             cluster(right_cluster, type);
 
-        translate([(RIGHT_CENTER_MAX_LENGTH-0.12)*PLATE_PLACEHOLDER_SIZE, (5-0.25)*PLATE_PLACEHOLDER_SIZE,0])
-            ky_040(type);
+        // knob
+        if (KNOB_LOCATION == KNOB_LEFT) {
+            translate([-(RIGHT_CENTER_MAX_LENGTH+0.08)*PLATE_PLACEHOLDER_SIZE, (4-0.15)*PLATE_PLACEHOLDER_SIZE,0])
+                ky_040(type);
+        } else if (KNOB_LOCATION == KNOB_RIGHT) {
+            translate([(RIGHT_CENTER_MAX_LENGTH-0.12)*PLATE_PLACEHOLDER_SIZE, (5-0.25)*PLATE_PLACEHOLDER_SIZE,0])
+                ky_040(type);
+        }
     };
 
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])

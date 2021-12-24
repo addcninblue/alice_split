@@ -145,13 +145,12 @@ module left(type, padding=PADDING) {
                 cluster(left_center_cluster, type);
 
             // #2
-            if (type == TYPE_B) {
-                translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+            translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+                if (type == TYPE_B) {
                     switch(1);
-            } else if (type == TYPE_A) {
-                translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+                } else if (type == TYPE_A) {
                     plate_placeholder(1);
-            }
+                }
         };
     };
 

@@ -20,6 +20,8 @@ BASE_HEIGHT = 3;
 OUTER_WIDTH = 3;
 INNER_WIDTH = 1;
 
+STANDOFF_RADIUS = 1.5;
+
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
     translate([width*PLATE_PLACEHOLDER_SIZE/2, PLATE_PLACEHOLDER_SIZE/2])
@@ -171,6 +173,24 @@ module left(type, padding=PADDING) {
         }
     };
 
+    module screw_cutouts() {
+        translate([-0.75*PADDING*PLATE_PLACEHOLDER_SIZE, -0.75*PADDING*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+
+        translate([-0.75*PADDING*PLATE_PLACEHOLDER_SIZE, (0.75*PADDING + 5)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+
+        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([(4.5+LEFT_CENTER_OFFSET-0.25*padding)*PLATE_PLACEHOLDER_SIZE, -0.75*padding*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+
+        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([(4.5+LEFT_CENTER_OFFSET-0.25*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+    };
+
     difference() {
         minkowski() {
             base();
@@ -191,6 +211,8 @@ module left(type, padding=PADDING) {
             base_cutouts();
             esc_cluster_cutout();
         }
+
+        screw_cutouts();
     };
 }
 
@@ -267,6 +289,26 @@ module right(type, padding=PADDING) {
         }
     };
 
+    module screw_cutouts() {
+        // center right
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, -0.75*padding*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+
+        // right
+        translate([(RIGHT_CENTER_MAX_LENGTH + padding)*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE, 0]) // TODO: unsure why this one doesn't have 0.75
+            circle(STANDOFF_RADIUS);
+
+        translate([(RIGHT_CENTER_MAX_LENGTH + padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(STANDOFF_RADIUS);
+    };
+
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
         rotate(a=[0, 0, -ROTATION])
         difference() {
@@ -285,5 +327,7 @@ module right(type, padding=PADDING) {
             }
 
             rotary_knob_cutout();
+
+            screw_cutouts();
         };
 }

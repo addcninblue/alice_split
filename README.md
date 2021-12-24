@@ -7,9 +7,10 @@ This is a split version of the [TGR Alice](https://geekhack.org/index.php?topic=
 * [X] Fix square joins on both boards
 * [ ] Add OLED display on right board, top right
 * [X] Add rotary encoder on left board, bottom left
-* [ ] Fix upper: remove islands
-* [ ] Left: Move esc/pgup/pgdown to own chunk and shift up a little
-* [ ] Both: Round out inner corners
+* [X] Fix upper: remove islands
+* [X] Left: Move esc/pgup/pgdown to own chunk and shift up a little
+* [X] Both: Round out inner corners
+* [ ] Add screw holes
 
 ## BOM
 

@@ -132,50 +132,41 @@ module left(type, padding=PADDING) {
         };
     };
 
-    module cutouts() {
-        union() {
-            // esc
-            minkowski() {
-                translate([0, 0.15*PLATE_PLACEHOLDER_SIZE, 0])
-                    cluster(esc_cluster, type);
-                circle(INNER_WIDTH);
-            };
+    module esc_cluster_cutout() {
+        translate([0, 0.15*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(esc_cluster, type);
+    };
 
-            minkowski() {
-                union() {
-                    // left
-                    cluster(left_cluster, type);
+    module base_cutouts() {
+        // left
+        cluster(left_cluster, type);
 
-                    // center left
-                    translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])       // Move object to appropriate position
-                        rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
-                        translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
-                        cluster(left_center_cluster, type);
+        // center left
+        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])       // Move object to appropriate position
+            rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
+            translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
+            cluster(left_center_cluster, type);
 
-                    // #2
-                    translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
-                        if (type == TYPE_B) {
-                            switch(1);
-                        } else if (type == TYPE_A) {
-                            plate_placeholder(1);
-                        }
+        // #2
+        translate([3.75*PLATE_PLACEHOLDER_SIZE, 4.07*PLATE_PLACEHOLDER_SIZE, 0])
+            if (type == TYPE_B) {
+                switch(1);
+            } else if (type == TYPE_A) {
+                plate_placeholder(1);
+            }
 
-                    // islands
-                    if (type == TYPE_A) {
-                        // left
-                        translate([3*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
-                            square([1.75*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
+        // islands
+        if (type == TYPE_A) {
+            // left
+            translate([3*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
+                square([1.75*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
 
-                        // center left
-                        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
-                            rotate(a=[0, 0, -ROTATION])
-                            translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
-                            square([1*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
-                    }
-                };
-                circle(INNER_WIDTH);
-            };
-        };
+            // center left
+            translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+                rotate(a=[0, 0, -ROTATION])
+                translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
+                square([1*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
+        }
     };
 
     difference() {
@@ -183,7 +174,21 @@ module left(type, padding=PADDING) {
             base();
             circle(OUTER_WIDTH);
         };
-        cutouts();
+
+        if (type == TYPE_A) {
+            minkowski() {
+                base_cutouts();
+                circle(INNER_WIDTH);
+            };
+
+            minkowski() {
+                esc_cluster_cutout();
+                circle(INNER_WIDTH);
+            }
+        } else {
+            base_cutouts();
+            esc_cluster_cutout();
+        }
     };
 }
 
@@ -219,8 +224,7 @@ module right(type, padding=PADDING) {
         }
     };
 
-    module cutouts() {
-        // knob
+    module rotary_knob_cutout() {
         if (KNOB_LOCATION == KNOB_LEFT) {
             translate([-(RIGHT_CENTER_MAX_LENGTH+0.08)*PLATE_PLACEHOLDER_SIZE, (4-0.15)*PLATE_PLACEHOLDER_SIZE,0])
                 ky_040(type);
@@ -228,40 +232,37 @@ module right(type, padding=PADDING) {
             translate([(RIGHT_CENTER_MAX_LENGTH-0.12)*PLATE_PLACEHOLDER_SIZE, (5-0.25)*PLATE_PLACEHOLDER_SIZE,0])
                 ky_040(type);
         }
+    };
 
-        minkowski() {
-            union() {
-                // center right
-                translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
-                    rotate(a=[0, 0, ROTATION])
-                    translate([-(RIGHT_CENTER_MAX_LENGTH) * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
-                    cluster(right_center_cluster, type);
+    module base_cutouts() {
+        // center right
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH) * PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom right cluster corner to 0,0
+            cluster(right_center_cluster, type);
 
-                // right
-                translate([-0.54 * PLATE_PLACEHOLDER_SIZE, -0.12*PLATE_PLACEHOLDER_SIZE, 0])
-                    cluster(right_cluster, type);
+        // right
+        translate([-0.54 * PLATE_PLACEHOLDER_SIZE, -0.12*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(right_cluster, type);
 
-                // right floating cluster
-                translate([-0.50 * PLATE_PLACEHOLDER_SIZE, -0.05*PLATE_PLACEHOLDER_SIZE, 0])
-                    cluster(minus_key, type);
-                translate([-0.53 * PLATE_PLACEHOLDER_SIZE, -0.10*PLATE_PLACEHOLDER_SIZE, 0])
-                    cluster(p_key, type);
+        // right floating cluster
+        translate([-0.50 * PLATE_PLACEHOLDER_SIZE, -0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(minus_key, type);
+        translate([-0.53 * PLATE_PLACEHOLDER_SIZE, -0.10*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(p_key, type);
 
-                // islands
-                if (type == TYPE_A) {
-                    // center right
-                    translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
-                        rotate(a=[0, 0, ROTATION])
-                        translate([-0.88*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
-                        square([1*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
+        // islands
+        if (type == TYPE_A) {
+            // center right
+            translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+                rotate(a=[0, 0, ROTATION])
+                translate([-0.88*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
+                square([1*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
 
-                    // right
-                    translate([-(0.2)*PLATE_PLACEHOLDER_SIZE, (1-0.05)*PLATE_PLACEHOLDER_SIZE, 0])
-                        square([1*PLATE_PLACEHOLDER_SIZE, 3*PLATE_PLACEHOLDER_SIZE]);
-                }
-            };
-            circle(INNER_WIDTH);
-        };
+            // right
+            translate([-(0.2)*PLATE_PLACEHOLDER_SIZE, (1-0.05)*PLATE_PLACEHOLDER_SIZE, 0])
+                square([1*PLATE_PLACEHOLDER_SIZE, 3*PLATE_PLACEHOLDER_SIZE]);
+        }
     };
 
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
@@ -271,6 +272,16 @@ module right(type, padding=PADDING) {
                 base();
                 circle(OUTER_WIDTH);
             };
-            cutouts();
+
+            if (type == TYPE_A) {
+                minkowski() {
+                    base_cutouts();
+                    circle(INNER_WIDTH);
+                }
+            } else {
+                base_cutouts();
+            }
+
+            rotary_knob_cutout();
         };
 }

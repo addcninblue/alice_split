@@ -14,7 +14,9 @@ SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
 ROTATION = 10; // degrees
 RIGHT_PLATE_OFFSET = 7;
 
+// Thicknesses: 5 5 5 3
 PLATE_HEIGHT = 5;
+BASE_HEIGHT = 3;
 OUTER_WIDTH = 3;
 INNER_WIDTH = 1;
 

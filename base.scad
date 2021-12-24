@@ -109,7 +109,7 @@ module left(type, padding=PADDING) {
                     square([(4.5+LEFT_CENTER_OFFSET+padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
 
                 // middle left
-                translate([4*PLATE_PLACEHOLDER_SIZE, 0, 0])
+                translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                     rotate(a=[0, 0, -ROTATION])
                     translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(LEFT_CENTER_LENGTH+padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
@@ -121,7 +121,7 @@ module left(type, padding=PADDING) {
                     square([(LEFT_CENTER_LENGTH+1)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
 
                 // Scuffed: Take out center left triangle
-                translate([4*PLATE_PLACEHOLDER_SIZE, 0, 0])
+                translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                     rotate(a=[0, 0, -ROTATION])
                     translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(LEFT_CENTER_LENGTH+1)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
@@ -139,7 +139,7 @@ module left(type, padding=PADDING) {
             cluster(left_cluster, type);
 
             // center left
-            translate([4*PLATE_PLACEHOLDER_SIZE, 0, 0])       // Move object to appropriate position
+            translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])       // Move object to appropriate position
                 rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
                 translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
                 cluster(left_center_cluster, type);

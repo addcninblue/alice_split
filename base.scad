@@ -86,11 +86,14 @@ right_center_cluster = [[0.75, 1,   1, 1, 1],
                         [0,    1,   1, 1, 1],
                         [0,    2.75, 1.5]];
 
-right_cluster = [[0.25,   1, 1, 1, 1],
-                 [0,   1, 1, 1, 1.5],
+right_cluster = [[1.25,   1, 1, 1],
+                 [1,   1, 1, 1.5],
                  [0.5,    1, 1, 2.25],
                  [0.25,   1, 1, 1.75, 1],
                  [3, 1.5]];
+
+minus_key = [[0.25, 1], [0, 0], [0, 0], [0, 0], [0, 0]];
+p_key = [[0, 0], [0, 1], [0, 0], [0, 0], [0, 0]];
 
 LEFT_CENTER_OFFSET = left_center_cluster[len(left_center_cluster) - 1][0];
 
@@ -177,7 +180,7 @@ module right(type, padding=PADDING) {
                     square([(RIGHT_CENTER_MAX_LENGTH + 4*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
 
                 // right
-                translate([-(padding+0.2)*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([-(padding+0.2)*PLATE_PLACEHOLDER_SIZE, -(padding+0.12)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(RIGHT_LENGTH+2*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
             }
 
@@ -189,7 +192,7 @@ module right(type, padding=PADDING) {
                     square([(RIGHT_CENTER_MAX_LENGTH + 4*padding)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
 
                 // Scuffed: Take out top triangle
-                translate([-(padding+0.2)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding)*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([-(padding+0.5)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding-0.12)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(RIGHT_LENGTH+2*padding)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
             }
         }
@@ -203,8 +206,14 @@ module right(type, padding=PADDING) {
             cluster(right_center_cluster, type);
 
         // right
-        translate([-0.2 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+        translate([-0.54 * PLATE_PLACEHOLDER_SIZE, -0.12*PLATE_PLACEHOLDER_SIZE, 0])
             cluster(right_cluster, type);
+
+        // right floating cluster
+        translate([-0.50 * PLATE_PLACEHOLDER_SIZE, -0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(minus_key, type);
+        translate([-0.53 * PLATE_PLACEHOLDER_SIZE, -0.10*PLATE_PLACEHOLDER_SIZE, 0])
+            cluster(p_key, type);
 
         // knob
         if (KNOB_LOCATION == KNOB_LEFT) {

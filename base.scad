@@ -180,7 +180,7 @@ module right(type, padding=PADDING) {
                     square([(RIGHT_CENTER_MAX_LENGTH + 4*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
 
                 // right
-                translate([-(padding+0.2)*PLATE_PLACEHOLDER_SIZE, -(padding+0.12)*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([-(padding+0.2)*PLATE_PLACEHOLDER_SIZE, -(padding+0.05)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(RIGHT_LENGTH+2*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
             }
 
@@ -192,7 +192,7 @@ module right(type, padding=PADDING) {
                     square([(RIGHT_CENTER_MAX_LENGTH + 4*padding)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
 
                 // Scuffed: Take out top triangle
-                translate([-(padding+0.5)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding-0.12)*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([-(padding+0.5)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding-0.05)*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(RIGHT_LENGTH+2*padding)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
             }
         }

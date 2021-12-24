@@ -65,10 +65,12 @@ module ky_040(type) {
 }
 
 // LEFT CLUSTER
+esc_cluster = [[0.5, 1], [0.25, 1], [0, 1], [0, 0], [0, 0]];
+
 //        PAD  ESC PAD   MODS KEY
-left_cluster = [[0.5,  1, 0.25, 1,    1],
-                [0.25, 1, 0.25, 1.5,  1],
-                [0,    1, 0.25, 1.75, 1],
+left_cluster = [[1.5,  0.25, 1,    1],
+                [1.25, 0.25, 1.5,  1],
+                [1,    0.25, 1.75, 1],
                 [1,             2.25, 1],
                 [1,          1.25]];
 
@@ -129,6 +131,10 @@ module left(type, padding=PADDING) {
 
     module cutouts() {
         union() {
+            // esc
+            translate([0, 0.10*PLATE_PLACEHOLDER_SIZE, 0])
+                cluster(esc_cluster, type);
+
             // left
             cluster(left_cluster, type);
 

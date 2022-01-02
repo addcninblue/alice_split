@@ -1,4 +1,5 @@
 include <const.scad>;
+include <constraints.scad>;
 
 /* 1u = 1mm */
 $fn = 50;
@@ -98,6 +99,8 @@ right_cluster = [[1.25,   1, 1, 1],
 
 minus_key = [[0.25, 1], [0, 0], [0, 0], [0, 0], [0, 0]];
 p_key = [[0, 0], [0, 1], [0, 0], [0, 0], [0, 0]];
+
+echo(check_constraints([esc_cluster, left_cluster, left_center_cluster, right_center_cluster, right_cluster, minus_key, p_key]));
 
 LEFT_CENTER_OFFSET = left_center_cluster[len(left_center_cluster) - 1][0];
 

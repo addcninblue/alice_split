@@ -21,7 +21,9 @@ BASE_HEIGHT = 3;
 OUTER_WIDTH = 3;
 INNER_WIDTH = 1;
 
-STANDOFF_RADIUS = 1.5;
+MAGNET_RADIUS = 3;
+MAGNET_HEIGHT = 2.1;
+MAGNET_DISTANCE = 2;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
@@ -176,46 +178,59 @@ module left(type, padding=PADDING) {
         }
     };
 
-    module screw_cutouts() {
-        translate([-0.75*PADDING*PLATE_PLACEHOLDER_SIZE, -0.75*PADDING*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+    module magnet_cutouts() {
+        translate([-0.25*PADDING*PLATE_PLACEHOLDER_SIZE, -0.25*PADDING*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
 
-        translate([-0.75*PADDING*PLATE_PLACEHOLDER_SIZE, (0.75*PADDING + 5)*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
-
-        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
-            rotate(a=[0, 0, -ROTATION])
-            translate([(4.5+LEFT_CENTER_OFFSET-0.25*padding)*PLATE_PLACEHOLDER_SIZE, -0.75*padding*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+        translate([-0.25*PADDING*PLATE_PLACEHOLDER_SIZE, (0.25*PADDING + 5)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
 
         translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
             rotate(a=[0, 0, -ROTATION])
-            translate([(4.5+LEFT_CENTER_OFFSET-0.25*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+            translate([(4.5+LEFT_CENTER_OFFSET-0.75*padding)*PLATE_PLACEHOLDER_SIZE, -0.25*padding*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
+
+        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([(4.5+LEFT_CENTER_OFFSET-0.75*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+0.25*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
     };
 
     difference() {
-        minkowski() {
-            base();
-            circle(OUTER_WIDTH);
-        };
-
-        if (type == TYPE_A) {
+        linear_extrude(height=PLATE_HEIGHT)
+        difference() {
             minkowski() {
-                base_cutouts();
-                circle(INNER_WIDTH);
+                base();
+                circle(OUTER_WIDTH);
             };
 
-            minkowski() {
-                esc_cluster_cutout();
-                circle(INNER_WIDTH);
-            }
-        } else {
-            base_cutouts();
-            esc_cluster_cutout();
-        }
+            if (type == TYPE_A) {
+                minkowski() {
+                    base_cutouts();
+                    circle(INNER_WIDTH);
+                };
 
-        screw_cutouts();
+                minkowski() {
+                    esc_cluster_cutout();
+                    circle(INNER_WIDTH);
+                }
+            } else {
+                base_cutouts();
+                esc_cluster_cutout();
+            }
+        };
+
+        if (type == TYPE_B || type == TYPE_C) {
+            if (type == TYPE_B) {
+                translate([0, 0, MAGNET_DISTANCE])
+                linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
+            } else {
+                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE])
+                linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
+            }
+        }
     };
 }
 
@@ -292,45 +307,58 @@ module right(type, padding=PADDING) {
         }
     };
 
-    module screw_cutouts() {
+    module magnet_cutouts() {
         // center right
         translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             rotate(a=[0, 0, ROTATION])
-            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, -0.75*padding*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.25*padding)*PLATE_PLACEHOLDER_SIZE, -0.25*padding*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
 
         translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             rotate(a=[0, 0, ROTATION])
-            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+            translate([-(RIGHT_CENTER_MAX_LENGTH + 0.25*padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.25*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
 
         // right
-        translate([(RIGHT_CENTER_MAX_LENGTH + padding)*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE, 0]) // TODO: unsure why this one doesn't have 0.75
-            circle(STANDOFF_RADIUS);
+        # translate([(RIGHT_CENTER_MAX_LENGTH + 0.5*padding - 1)*PLATE_PLACEHOLDER_SIZE, -0.5*padding*PLATE_PLACEHOLDER_SIZE, 0]) // TODO: unsure why this one doesn't have 0.75
+            circle(MAGNET_RADIUS);
 
-        translate([(RIGHT_CENTER_MAX_LENGTH + padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.75*padding)*PLATE_PLACEHOLDER_SIZE, 0])
-            circle(STANDOFF_RADIUS);
+        translate([(RIGHT_CENTER_MAX_LENGTH + 0.5*padding - 1)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + 0.25*padding)*PLATE_PLACEHOLDER_SIZE, 0])
+            circle(MAGNET_RADIUS);
     };
 
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
         rotate(a=[0, 0, -ROTATION])
         difference() {
-            minkowski() {
-                base();
-                circle(OUTER_WIDTH);
-            };
+            linear_extrude(height=PLATE_HEIGHT)
+                difference() {
+                    minkowski() {
+                        base();
+                        circle(OUTER_WIDTH);
+                    };
 
-            if (type == TYPE_A) {
-                minkowski() {
-                    base_cutouts();
-                    circle(INNER_WIDTH);
+                    if (type == TYPE_A) {
+                        minkowski() {
+                            base_cutouts();
+                            circle(INNER_WIDTH);
+                        }
+                    } else {
+                        base_cutouts();
+                    }
+
+                    rotary_knob_cutout();
+                };
+
+            if (type == TYPE_B || type == TYPE_C) {
+                if (type == TYPE_B) {
+                    translate([0, 0, MAGNET_DISTANCE])
+                        linear_extrude(height=MAGNET_HEIGHT)
+                        magnet_cutouts();
+                } else {
+                    translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE])
+                        linear_extrude(height=MAGNET_HEIGHT)
+                        magnet_cutouts();
                 }
-            } else {
-                base_cutouts();
             }
-
-            rotary_knob_cutout();
-
-            screw_cutouts();
         };
 }

@@ -23,7 +23,7 @@ INNER_WIDTH = 1;
 
 MAGNET_RADIUS = 3;
 MAGNET_HEIGHT = 2.1;
-MAGNET_DISTANCE = 2;
+MAGNET_DISTANCE = 0;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {

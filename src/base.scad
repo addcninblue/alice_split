@@ -197,8 +197,7 @@ module left(type, padding=PADDING) {
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
     };
 
-    difference() {
-        linear_extrude(height=PLATE_HEIGHT)
+    module case() {
         difference() {
             minkowski() {
                 base(padding);
@@ -222,6 +221,16 @@ module left(type, padding=PADDING) {
                 base(0.5*PADDING);
             }
         };
+    };
+
+    difference() {
+        if (type == TYPE_D) {
+            linear_extrude(height=BASE_HEIGHT)
+                case();
+        } else {
+            linear_extrude(height=PLATE_HEIGHT)
+                case();
+        }
 
         if (type == TYPE_B || type == TYPE_C) {
             if (type == TYPE_B) {
@@ -330,29 +339,38 @@ module right(type, padding=PADDING) {
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
     };
 
+    module case() {
+        difference() {
+            minkowski() {
+                base(padding);
+                circle(OUTER_WIDTH);
+            };
+
+            if (type == TYPE_A) {
+                minkowski() {
+                    base_cutouts();
+                    circle(INNER_WIDTH);
+                }
+            } else if (type == TYPE_B) {
+                base_cutouts();
+            } else if (type == TYPE_C) {
+                base(0.5*PADDING);
+            }
+
+            rotary_knob_cutout();
+        };
+    };
+
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
         rotate(a=[0, 0, -ROTATION])
         difference() {
-            linear_extrude(height=PLATE_HEIGHT)
-                difference() {
-                    minkowski() {
-                        base(padding);
-                        circle(OUTER_WIDTH);
-                    };
-
-                    if (type == TYPE_A) {
-                        minkowski() {
-                            base_cutouts();
-                            circle(INNER_WIDTH);
-                        }
-                    } else if (type == TYPE_B) {
-                        base_cutouts();
-                    } else if (type == TYPE_C) {
-                        base(0.5*PADDING);
-                    }
-
-                    rotary_knob_cutout();
-                };
+            if (type == TYPE_D) {
+                linear_extrude(height=BASE_HEIGHT)
+                    case();
+            } else {
+                linear_extrude(height=PLATE_HEIGHT)
+                    case();
+            }
 
             if (type == TYPE_B || type == TYPE_C) {
                 if (type == TYPE_B) {

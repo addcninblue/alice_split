@@ -232,16 +232,14 @@ module left(type, padding=PADDING) {
                 case();
         }
 
-        if (type == TYPE_B || type == TYPE_C) {
-            if (type == TYPE_B) {
-                translate([0, 0, MAGNET_DISTANCE])
+        if (type == TYPE_B) {
+            translate([0, 0, MAGNET_DISTANCE])
                 linear_extrude(height=MAGNET_HEIGHT)
-                    magnet_cutouts();
-            } else {
-                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
+                magnet_cutouts();
+        } else if (type == TYPE_C) {
+            translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
                 linear_extrude(height=MAGNET_HEIGHT)
-                    magnet_cutouts();
-            }
+                magnet_cutouts();
         }
     };
 }
@@ -372,16 +370,14 @@ module right(type, padding=PADDING) {
                     case();
             }
 
-            if (type == TYPE_B || type == TYPE_C) {
-                if (type == TYPE_B) {
-                    translate([0, 0, MAGNET_DISTANCE])
-                        linear_extrude(height=MAGNET_HEIGHT)
-                        magnet_cutouts();
-                } else {
-                    translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
-                        linear_extrude(height=MAGNET_HEIGHT)
-                        magnet_cutouts();
-                }
+            if (type == TYPE_B) {
+                translate([0, 0, MAGNET_DISTANCE])
+                    linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
+            } else if (type == TYPE_C) {
+                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
+                    linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
             }
         };
 }

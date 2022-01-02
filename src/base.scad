@@ -6,6 +6,8 @@ $fn = 50;
 $fa = 5;
 $fs = 0.1;
 
+DEBUG = false;
+
 // VARIABLES
 KNOB_LOCATION = KNOB_LEFT;
 
@@ -25,6 +27,8 @@ MAGNET_LENGTH = 25.4;
 MAGNET_WIDTH = 3.2;
 MAGNET_HEIGHT = 4; // 3.2
 MAGNET_DISTANCE = 0;
+
+IO_HOLE_LENGTH = 20;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
@@ -69,6 +73,12 @@ module ky_040(type) {
         circle(7/2);
     } else if (type == TYPE_A) {
         circle(16/2);
+    }
+}
+
+module io_hole(type) {
+    if (type == TYPE_C) {
+         square([2*PADDING*PLATE_PLACEHOLDER_SIZE, IO_HOLE_LENGTH]);
     }
 }
 
@@ -197,6 +207,13 @@ module left(type, padding=PADDING) {
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
     };
 
+    module io_cutout() {
+        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([(5-LEFT_CENTER_OFFSET-padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
+        io_hole(type);
+    };
+
     module case() {
         difference() {
             minkowski() {
@@ -219,29 +236,34 @@ module left(type, padding=PADDING) {
                 esc_cluster_cutout();
             } else if (type == TYPE_C) {
                 base(0.5*PADDING);
+                io_cutout();
             }
         };
     };
 
-    difference() {
-        if (type == TYPE_D) {
-            linear_extrude(height=BASE_HEIGHT)
-                case();
-        } else {
-            linear_extrude(height=PLATE_HEIGHT)
-                case();
-        }
+    if (DEBUG) {
+        case();
+    } else {
+        difference() {
+            if (type == TYPE_D) {
+                linear_extrude(height=BASE_HEIGHT)
+                    case();
+            } else {
+                linear_extrude(height=PLATE_HEIGHT)
+                    case();
+            }
 
-        if (type == TYPE_B) {
-            translate([0, 0, MAGNET_DISTANCE])
-                linear_extrude(height=MAGNET_HEIGHT)
-                magnet_cutouts();
-        } else if (type == TYPE_C) {
-            translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
-                linear_extrude(height=MAGNET_HEIGHT)
-                magnet_cutouts();
-        }
-    };
+            if (type == TYPE_B) {
+                translate([0, 0, MAGNET_DISTANCE])
+                    linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
+            } else if (type == TYPE_C) {
+                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
+                    linear_extrude(height=MAGNET_HEIGHT)
+                    magnet_cutouts();
+            }
+        };
+    }
 }
 
 module right(type, padding=PADDING) {
@@ -337,6 +359,13 @@ module right(type, padding=PADDING) {
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
     };
 
+    module io_cutout() {
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
+            io_hole(type);
+    };
+
     module case() {
         difference() {
             minkowski() {
@@ -353,6 +382,7 @@ module right(type, padding=PADDING) {
                 base_cutouts();
             } else if (type == TYPE_C) {
                 base(0.5*PADDING);
+                io_cutout();
             }
 
             rotary_knob_cutout();
@@ -361,23 +391,27 @@ module right(type, padding=PADDING) {
 
     translate([RIGHT_CENTER_MAX_LENGTH * PLATE_PLACEHOLDER_SIZE, RIGHT_PLATE_OFFSET * PLATE_PLACEHOLDER_SIZE, 0])
         rotate(a=[0, 0, -ROTATION])
-        difference() {
-            if (type == TYPE_D) {
-                linear_extrude(height=BASE_HEIGHT)
-                    case();
-            } else {
-                linear_extrude(height=PLATE_HEIGHT)
-                    case();
-            }
+        if (DEBUG) {
+            case();
+        } else {
+            difference() {
+                if (type == TYPE_D) {
+                    linear_extrude(height=BASE_HEIGHT)
+                        case();
+                } else {
+                    linear_extrude(height=PLATE_HEIGHT)
+                        case();
+                }
 
-            if (type == TYPE_B) {
-                translate([0, 0, MAGNET_DISTANCE])
-                    linear_extrude(height=MAGNET_HEIGHT)
-                    magnet_cutouts();
-            } else if (type == TYPE_C) {
-                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
-                    linear_extrude(height=MAGNET_HEIGHT)
-                    magnet_cutouts();
-            }
-        };
+                if (type == TYPE_B) {
+                    translate([0, 0, MAGNET_DISTANCE])
+                        linear_extrude(height=MAGNET_HEIGHT)
+                        magnet_cutouts();
+                } else if (type == TYPE_C) {
+                    translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
+                        linear_extrude(height=MAGNET_HEIGHT)
+                        magnet_cutouts();
+                }
+            };
+        }
 }

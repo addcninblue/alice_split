@@ -9,8 +9,8 @@ This is a split version of the [TGR Alice](https://geekhack.org/index.php?topic=
 * [X] Left: Move esc/pgup/pgdown to own chunk and shift up a little
 * [X] Both: Round out inner corners
 * [ ] Add OLED display on right board, top right
-* [ ] Add pro micro cutout (layer C/D)
-* [ ] Add audio cutout (layer C/D)
+* [X] Add pro micro cutout (layer C/D)
+* [X] Add audio cutout (layer C/D)
 * [X] Add screw holes
 
 ## BOM

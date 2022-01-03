@@ -28,6 +28,9 @@ MAGNET_WIDTH = 3.2;
 MAGNET_HEIGHT = 4; // 3.2
 MAGNET_DISTANCE = 0;
 
+AUDIO_LENGTH = 18;
+AUDIO_RADIUS = 8.2/2;
+
 IO_HOLE_LENGTH = 20;
 
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
@@ -79,6 +82,13 @@ module ky_040(type) {
 module io_hole(type) {
     if (type == TYPE_C) {
          square([2*PADDING*PLATE_PLACEHOLDER_SIZE, IO_HOLE_LENGTH]);
+    }
+}
+
+module audio_hole(type) {
+    if (type == TYPE_B || type == TYPE_C) {
+         rotate([0, 90, 0])
+         cylinder(AUDIO_LENGTH+PADDING, AUDIO_RADIUS, AUDIO_RADIUS);
     }
 }
 
@@ -214,6 +224,13 @@ module left(type, padding=PADDING) {
         io_hole(type);
     };
 
+    module audio_cutout() {
+        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            rotate(a=[0, 0, -ROTATION])
+            translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
+            audio_hole(type);
+    };
+
     module case() {
         difference() {
             minkowski() {
@@ -257,6 +274,7 @@ module left(type, padding=PADDING) {
                 translate([0, 0, MAGNET_DISTANCE])
                     linear_extrude(height=MAGNET_HEIGHT)
                     magnet_cutouts();
+                audio_cutout();
             } else if (type == TYPE_C) {
                 translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
                     linear_extrude(height=MAGNET_HEIGHT)
@@ -366,6 +384,13 @@ module right(type, padding=PADDING) {
             io_hole(type);
     };
 
+    module audio_cutout() {
+        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+            rotate(a=[0, 0, ROTATION])
+            translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
+            audio_hole(type);
+    };
+
     module case() {
         difference() {
             minkowski() {
@@ -382,7 +407,7 @@ module right(type, padding=PADDING) {
                 base_cutouts();
             } else if (type == TYPE_C) {
                 base(0.5*PADDING);
-                io_cutout();
+                /* io_cutout(); */
             }
 
             rotary_knob_cutout();
@@ -407,6 +432,7 @@ module right(type, padding=PADDING) {
                     translate([0, 0, MAGNET_DISTANCE])
                         linear_extrude(height=MAGNET_HEIGHT)
                         magnet_cutouts();
+                    audio_cutout();
                 } else if (type == TYPE_C) {
                     translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
                         linear_extrude(height=MAGNET_HEIGHT)

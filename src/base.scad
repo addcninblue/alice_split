@@ -14,7 +14,7 @@ KNOB_LOCATION = KNOB_LEFT;
 // CONSTANTS
 PLATE_PLACEHOLDER_SIZE = 19.05;
 SWITCH_SIZE = 14; // Change to 18 to see keycap clearance
-ROTATION = 10; // degrees
+ROTATION = 12; // degrees
 RIGHT_PLATE_OFFSET = 7;
 
 // Thicknesses: 5 5 5 3
@@ -96,7 +96,7 @@ left_center_cluster = [[0.5,  1,   1, 1, 1],
                        [0,    1,   1, 1, 1],
                        [0.25, 1,   1, 1, 1],
                        [0.75, 1,   1, 1, 1],
-                       [0.25, 1.25, 1, 1, 1.25]];
+                       [0.25, 1.25, 1, 1.25, 1.25]];
 
 right_center_cluster = [[0.75, 1,   1, 1, 1],
                         [0.25, 1,   1, 1, 1],
@@ -132,7 +132,7 @@ module left(type, padding=PADDING) {
                     square([(4.5+LEFT_CENTER_OFFSET+padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
 
                 // middle left
-                translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                     rotate(a=[0, 0, -ROTATION])
                     translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE, 0])
                     square([(LEFT_CENTER_LENGTH+padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+2*padding)*PLATE_PLACEHOLDER_SIZE]);
@@ -144,10 +144,10 @@ module left(type, padding=PADDING) {
                     square([(LEFT_CENTER_LENGTH+1)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
 
                 // Scuffed: Take out center left triangle
-                translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+                translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                     rotate(a=[0, 0, -ROTATION])
-                    translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding)*PLATE_PLACEHOLDER_SIZE, 0])
-                    square([(LEFT_CENTER_LENGTH+1)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
+                    translate([-(LEFT_CENTER_OFFSET+1)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding)*PLATE_PLACEHOLDER_SIZE, 0])
+                    square([(LEFT_CENTER_LENGTH+2)*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE]);
             };
         };
     };
@@ -162,7 +162,7 @@ module left(type, padding=PADDING) {
         cluster(left_cluster, type);
 
         // center left
-        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])       // Move object to appropriate position
+        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])       // Move object to appropriate position
             rotate(a=[0, 0, -ROTATION])                 // Apply rotation, centered on bottom left key
             translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, 0, 0]) // Translate bottom left cluster corner to 0,0
             cluster(left_center_cluster, type);
@@ -182,7 +182,7 @@ module left(type, padding=PADDING) {
                 square([1.75*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
 
             // center left
-            translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+            translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                 rotate(a=[0, 0, -ROTATION])
                 translate([-LEFT_CENTER_OFFSET*PLATE_PLACEHOLDER_SIZE, PLATE_PLACEHOLDER_SIZE, 0])
                 square([1*PLATE_PLACEHOLDER_SIZE, 4*PLATE_PLACEHOLDER_SIZE]);
@@ -196,21 +196,21 @@ module left(type, padding=PADDING) {
         translate([0, (padding + 5)*PLATE_PLACEHOLDER_SIZE - MAGNET_WIDTH/2, 0])
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
 
-        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
             rotate(a=[0, 0, -ROTATION])
             translate([(3.5-LEFT_CENTER_OFFSET-padding)*PLATE_PLACEHOLDER_SIZE, -padding*PLATE_PLACEHOLDER_SIZE-MAGNET_WIDTH/2, 0])
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
 
-        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
             rotate(a=[0, 0, -ROTATION])
             translate([(3.5-LEFT_CENTER_OFFSET-padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT+padding)*PLATE_PLACEHOLDER_SIZE-MAGNET_WIDTH/2, 0])
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
     };
 
     module io_cutout() {
-        translate([4*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
             rotate(a=[0, 0, -ROTATION])
-            translate([(5-LEFT_CENTER_OFFSET-padding)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
+            translate([(5-LEFT_CENTER_OFFSET)*PLATE_PLACEHOLDER_SIZE, (HEIGHT)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
         io_hole(type);
     };
 
@@ -300,7 +300,7 @@ module right(type, padding=PADDING) {
 
     module rotary_knob_cutout() {
         if (KNOB_LOCATION == KNOB_LEFT) {
-            translate([-(RIGHT_CENTER_MAX_LENGTH+0.08)*PLATE_PLACEHOLDER_SIZE, (4-0.15)*PLATE_PLACEHOLDER_SIZE,0])
+            translate([-(RIGHT_CENTER_MAX_LENGTH+0.20)*PLATE_PLACEHOLDER_SIZE, (4-0.50)*PLATE_PLACEHOLDER_SIZE,0])
                 ky_040(type);
         } else if (KNOB_LOCATION == KNOB_RIGHT) {
             translate([(RIGHT_CENTER_MAX_LENGTH-0.12)*PLATE_PLACEHOLDER_SIZE, (5-0.25)*PLATE_PLACEHOLDER_SIZE,0])
@@ -316,13 +316,13 @@ module right(type, padding=PADDING) {
             cluster(right_center_cluster, type);
 
         // right
-        translate([-0.54 * PLATE_PLACEHOLDER_SIZE, -0.12*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([-0.64 * PLATE_PLACEHOLDER_SIZE, -0.10*PLATE_PLACEHOLDER_SIZE, 0])
             cluster(right_cluster, type);
 
         // right floating cluster
-        translate([-0.50 * PLATE_PLACEHOLDER_SIZE, -0.05*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([-0.63 * PLATE_PLACEHOLDER_SIZE, -0.08*PLATE_PLACEHOLDER_SIZE, 0])
             cluster(minus_key, type);
-        translate([-0.53 * PLATE_PLACEHOLDER_SIZE, -0.10*PLATE_PLACEHOLDER_SIZE, 0])
+        translate([-0.63 * PLATE_PLACEHOLDER_SIZE, -0.14*PLATE_PLACEHOLDER_SIZE, 0])
             cluster(p_key, type);
 
         // islands
@@ -348,7 +348,7 @@ module right(type, padding=PADDING) {
 
         translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             rotate(a=[0, 0, ROTATION])
-            translate([-RIGHT_CENTER_MAX_LENGTH*PLATE_PLACEHOLDER_SIZE, (HEIGHT + padding)*PLATE_PLACEHOLDER_SIZE - MAGNET_HEIGHT/2, 0])
+            translate([(-RIGHT_CENTER_MAX_LENGTH+2)*PLATE_PLACEHOLDER_SIZE, (HEIGHT + padding)*PLATE_PLACEHOLDER_SIZE - MAGNET_HEIGHT/2, 0])
             square([MAGNET_LENGTH, MAGNET_WIDTH]);
 
         // right
@@ -362,7 +362,7 @@ module right(type, padding=PADDING) {
     module io_cutout() {
         translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
             rotate(a=[0, 0, ROTATION])
-            translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
+            translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
             io_hole(type);
     };
 

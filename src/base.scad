@@ -225,10 +225,17 @@ module left(type, padding=PADDING) {
     };
 
     module audio_cutout() {
-        translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
-            rotate(a=[0, 0, -ROTATION])
-            translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
-            audio_hole(type);
+        if (type == TYPE_B) {
+            translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+                rotate(a=[0, 0, -ROTATION])
+                translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
+                audio_hole(type);
+        } else if (type == TYPE_C) {
+            translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
+                rotate(a=[0, 0, -ROTATION])
+                translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, PLATE_HEIGHT])
+                audio_hole(type);
+        }
     };
 
     module case() {
@@ -253,7 +260,6 @@ module left(type, padding=PADDING) {
                 esc_cluster_cutout();
             } else if (type == TYPE_C) {
                 base(0.5*PADDING);
-                io_cutout();
             }
         };
     };
@@ -279,6 +285,7 @@ module left(type, padding=PADDING) {
                 translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
                     linear_extrude(height=MAGNET_HEIGHT)
                     magnet_cutouts();
+                audio_cutout();
             }
         };
     }
@@ -385,10 +392,17 @@ module right(type, padding=PADDING) {
     };
 
     module audio_cutout() {
-        translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
-            rotate(a=[0, 0, ROTATION])
-            translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
-            audio_hole(type);
+        if (type == TYPE_B) {
+            translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+                rotate(a=[0, 0, ROTATION])
+                translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
+                audio_hole(type);
+        } else if (type == TYPE_C) {
+            translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
+                rotate(a=[0, 0, ROTATION])
+                translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, PLATE_HEIGHT])
+                audio_hole(type);
+        }
     };
 
     module case() {
@@ -437,6 +451,7 @@ module right(type, padding=PADDING) {
                     translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
                         linear_extrude(height=MAGNET_HEIGHT)
                         magnet_cutouts();
+                    audio_cutout();
                 }
             };
         }

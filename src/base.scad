@@ -33,6 +33,9 @@ AUDIO_RADIUS = 8.2/2;
 
 IO_HOLE_LENGTH = 20;
 
+HORIZONTAL_ANGLE = 20;
+VERTICAL_ANGLE = -16;
+
 // https://cdn.matt3o.com/uploads/2018/05/keycap-size-diagram.png
 module plate_placeholder(width=1) {
     translate([width*PLATE_PLACEHOLDER_SIZE/2, PLATE_PLACEHOLDER_SIZE/2])
@@ -86,7 +89,7 @@ module io_hole(type) {
 }
 
 module audio_hole(type) {
-    if (type == TYPE_B || type == TYPE_C) {
+    if (type == TYPE_B || type == TYPE_D) {
          rotate([0, 90, 0])
          cylinder(AUDIO_LENGTH+PADDING, AUDIO_RADIUS, AUDIO_RADIUS);
     }
@@ -230,12 +233,18 @@ module left(type, padding=PADDING) {
                 rotate(a=[0, 0, -ROTATION])
                 translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, 0])
                 audio_hole(type);
-        } else if (type == TYPE_C) {
+        } else if (type == TYPE_D) {
             translate([3.6*PLATE_PLACEHOLDER_SIZE, 0.05*PLATE_PLACEHOLDER_SIZE, 0])
                 rotate(a=[0, 0, -ROTATION])
-                translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH, PLATE_HEIGHT])
+                translate([(5-LEFT_CENTER_OFFSET-0.50)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-0.5)*PLATE_PLACEHOLDER_SIZE-IO_HOLE_LENGTH])
                 audio_hole(type);
         }
+    };
+
+    module base_rotate() {
+        translate([0, 0, (5+2*PADDING)*PLATE_PLACEHOLDER_SIZE * sin(-VERTICAL_ANGLE)])
+            rotate([VERTICAL_ANGLE, -HORIZONTAL_ANGLE, 0])
+            children();
     };
 
     module case() {
@@ -269,8 +278,15 @@ module left(type, padding=PADDING) {
     } else {
         difference() {
             if (type == TYPE_D) {
-                linear_extrude(height=BASE_HEIGHT)
-                    case();
+                difference() {
+                    linear_extrude(height=100)
+                        base_rotate()
+                        case();
+
+                    base_rotate()
+                        translate([0, 0, 50])
+                        cube([500, 500, 100], center=true);
+                }
             } else {
                 linear_extrude(height=PLATE_HEIGHT)
                     case();
@@ -281,11 +297,14 @@ module left(type, padding=PADDING) {
                     linear_extrude(height=MAGNET_HEIGHT)
                     magnet_cutouts();
                 audio_cutout();
-            } else if (type == TYPE_C) {
-                translate([0, 0, PLATE_HEIGHT-MAGNET_DISTANCE-MAGNET_HEIGHT])
-                    linear_extrude(height=MAGNET_HEIGHT)
-                    magnet_cutouts();
-                audio_cutout();
+            } else if (type == TYPE_D) {
+                base_rotate()
+                union() {
+                    translate([0, 0, -MAGNET_DISTANCE-MAGNET_HEIGHT])
+                        linear_extrude(height=MAGNET_HEIGHT)
+                        magnet_cutouts();
+                    audio_cutout();
+                }
             }
         };
     }
@@ -397,7 +416,7 @@ module right(type, padding=PADDING) {
                 rotate(a=[0, 0, ROTATION])
                 translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, 0])
                 audio_hole(type);
-        } else if (type == TYPE_C) {
+        } else if (type == TYPE_D) {
             translate([0.5 * PLATE_PLACEHOLDER_SIZE, 0, 0])
                 rotate(a=[0, 0, ROTATION])
                 translate([-(RIGHT_CENTER_MAX_LENGTH+2*PADDING)*PLATE_PLACEHOLDER_SIZE, (HEIGHT-1.5)*PLATE_PLACEHOLDER_SIZE - IO_HOLE_LENGTH, PLATE_HEIGHT])
